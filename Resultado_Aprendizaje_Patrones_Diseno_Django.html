@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resultado de Aprendizaje: Arquitectura en Capas y Patrones de Diseño</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  @page {
+    size: A4;
+    margin: 16mm 14mm 16mm 14mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.5;
+    font-size: 13px;
+  }
+
+  .cover {
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 88vh;
+    padding: 40px 24px;
+    border-left: 7px solid #2563eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    border-radius: 0 16px 16px 0;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+
+  .cover-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+
+  .cover-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 30px;
+    line-height: 1.4;
+  }
+
+  .cover-meta {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-width: 550px;
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .meta-row:last-child {
+    border-bottom: none;
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .meta-val {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .section-block {
+    margin-bottom: 22px;
+    page-break-inside: avoid;
+  }
+
+  .section-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+
+  .section-number {
+    background: #2563eb;
+    color: #ffffff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 10px 0 5px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #334155;
+    text-align: justify;
+  }
+
+  /* Code window styling */
+  .code-window {
+    background: #0f172a;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border: 1px solid #1e293b;
+    page-break-inside: avoid;
+  }
+
+  .window-header {
+    background: #1e293b;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #334155;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+
+  .window-title {
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  pre {
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.42;
+    color: #f8fafc;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .kw { color: #f43f5e; font-weight: 600; }
+  .fn { color: #38bdf8; }
+  .cls { color: #fbbf24; font-weight: 600; }
+  .str { color: #34d399; }
+  .num { color: #a78bfa; }
+  .cmt { color: #64748b; font-style: italic; }
+  .dec { color: #fb923c; }
+
+  /* Diagram Box */
+  .diagram-container {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 12px 0;
+    text-align: center;
+    page-break-inside: avoid;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    padding: 9px 12px;
+    text-align: left;
+    border: 1px solid #cbd5e1;
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+
+  tr:nth-child(even) {
+    background: #f8fafc;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+
+  .badge-creacional { background: #dcfce7; color: #15803d; }
+  .badge-estructural { background: #e0e7ff; color: #4338ca; }
+  .badge-comportamiento { background: #fef3c7; color: #b45309; }
+
+  /* Terminal Window */
+  .terminal-window {
+    background: #090d16;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #1e293b;
+    page-break-inside: avoid;
+  }
+
+  .terminal-content {
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.38;
+    color: #cbd5e1;
+  }
+
+  .term-prompt { color: #38bdf8; font-weight: 700; }
+  .term-ok { color: #4ade80; font-weight: 700; }
+  .term-head { color: #94a3b8; }
+
+  /* Callout info */
+  .callout {
+    border-left: 4px solid #3b82f6;
+    background: #eff6ff;
+    padding: 10px 12px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    font-size: 12px;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    color: #1d4ed8;
+    margin-bottom: 3px;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-badge">Unidad 1: Arquitectura y Patrones de Software</div>
+  <h1 class="cover-title">Resultado de Aprendizaje:<br>Arquitectura en Capas y Patrones de Diseño</h1>
+  <p class="cover-subtitle">Integración de Metodología Ágil, Framework Django REST, Capa de Servicios y Patrones de Diseño Gang of Four (GoF)</p>
+  
+  <div class="cover-meta">
+    <div class="meta-row">
+      <span class="meta-label">Proyecto:</span>
+      <span class="meta-val">Django REST API Tienda Online</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Framework Base:</span>
+      <span class="meta-val">Django 5.2 / Django REST Framework</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Autenticación y Seguridad:</span>
+      <span class="meta-val">JWT (djangorestframework-simplejwt)</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Patrones Implementados:</span>
+      <span class="meta-val">Factory Method (Creacional), Facade (Estructural), Strategy (Comportamiento)</span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Suite de Pruebas:</span>
+      <span class="meta-val" style="color: #16a34a;">8 / 8 Tests Pasando (100% OK)</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECCION 1: MODELO DE ARQUITECTURA -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">1</span>
+    Identificación del Modelo de Arquitectura
+  </div>
+  <p>
+    El proyecto Django implementa una <strong>Arquitectura en Capas (Layered Architecture)</strong> construida sobre el patrón fundamental <strong>MVT (Model-View-Template / Model-View-Controller en Django REST)</strong>, al cual se le ha incorporado una <strong>Capa de Servicios (Service Layer)</strong> para encapsular la lógica de negocio y desacoplarla de los controladores HTTP.
+  </p>
+  <p>
+    Esta arquitectura establece límites bien definidos entre responsabilidades:
+  </p>
+  <ul style="margin-left: 20px; margin-bottom: 10px; color: #334155;">
+    <li><strong>Capa de Enrutamiento (<code>urls.py</code>):</strong> Punto de entrada que recibe las solicitudes HTTP entrantes y las redirige hacia la vista o controlador correspondiente.</li>
+    <li><strong>Capa de Vistas / Fachada (<code>views.py</code>):</strong> Valida la autenticación mediante JWT, extrae parámetros HTTP, actúa como punto de acceso simplificado (patrón <strong>Facade</strong>) delegando el trabajo pesado a la capa de servicios, y serializa la respuesta JSON.</li>
+    <li><strong>Capa de Servicios (<code>services.py</code>):</strong> Nueva capa donde reside la lógica de negocio pura (algoritmos de descuento según categoría mediante el patrón <strong>Strategy</strong>), independiente de la base de datos o de la interfaz HTTP.</li>
+    <li><strong>Capa de Modelos / Persistencia (<code>models.py</code>):</strong> Define las entidades del dominio, las relaciones en base de datos relacional y proporciona métodos de creación controlada mediante el patrón <strong>Factory Method</strong>.</li>
+  </ul>
+
+  <div class="diagram-container">
+    <div style="font-weight: 700; color: #1e293b; margin-bottom: 10px; font-size: 12.5px;">
+      DIAGRAMA DE ARQUITECTURA EN CAPAS Y FLUJO DE UNA PETICIÓN HTTP
+    </div>
+    <svg width="680" height="145" viewBox="0 0 680 145" style="max-width: 100%; height: auto;">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 8 5 L 0 9 z" fill="#2563eb" />
+        </marker>
+        <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f8fafc" />
+          <stop offset="100%" stop-color="#eff6ff" />
+        </linearGradient>
+      </defs>
+      
+      <!-- Cliente -->
+      <rect x="8" y="32" width="105" height="75" rx="8" fill="url(#boxGrad)" stroke="#3b82f6" stroke-width="2" />
+      <text x="60" y="60" text-anchor="middle" font-family="Inter" font-size="11.5" font-weight="700" fill="#1e293b">Cliente HTTP</text>
+      <text x="60" y="77" text-anchor="middle" font-family="Inter" font-size="9.5" fill="#64748b">JWT Bearer Token</text>
+      <text x="60" y="93" text-anchor="middle" font-family="Inter" font-size="9" fill="#2563eb">GET /precio-final/</text>
+
+      <path d="M 113 70 L 143 70" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)" />
+
+      <!-- urls.py -->
+      <rect x="148" y="32" width="112" height="75" rx="8" fill="url(#boxGrad)" stroke="#3b82f6" stroke-width="2" />
+      <text x="204" y="58" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#1e293b">1. Rutas</text>
+      <text x="204" y="75" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#2563eb">urls.py</text>
+      <text x="204" y="92" text-anchor="middle" font-family="Inter" font-size="9.5" fill="#64748b">Enrutamiento</text>
+
+      <path d="M 260 70 L 290 70" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)" />
+
+      <!-- views.py -->
+      <rect x="295" y="32" width="115" height="75" rx="8" fill="url(#boxGrad)" stroke="#2563eb" stroke-width="2.5" />
+      <text x="352" y="56" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#1e293b">2. Fachada / Vista</text>
+      <text x="352" y="73" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#2563eb">views.py</text>
+      <text x="352" y="90" text-anchor="middle" font-family="Inter" font-size="9" fill="#15803d">Patrón Facade</text>
+
+      <path d="M 410 70 L 440 70" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)" />
+
+      <!-- services.py -->
+      <rect x="445" y="32" width="115" height="75" rx="8" fill="url(#boxGrad)" stroke="#2563eb" stroke-width="2.5" />
+      <text x="502" y="56" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#1e293b">3. Lógica Negocio</text>
+      <text x="502" y="73" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#2563eb">services.py</text>
+      <text x="502" y="90" text-anchor="middle" font-family="Inter" font-size="9" fill="#b45309">Patrón Strategy</text>
+
+      <path d="M 560 70 L 585 70" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)" />
+
+      <!-- models.py -->
+      <rect x="590" y="32" width="85" height="75" rx="8" fill="url(#boxGrad)" stroke="#3b82f6" stroke-width="2" />
+      <text x="632" y="56" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#1e293b">4. Modelos</text>
+      <text x="632" y="73" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#2563eb">models.py</text>
+      <text x="632" y="90" text-anchor="middle" font-family="Inter" font-size="9" fill="#15803d">Factory Method</text>
+    </svg>
+    <div style="font-size: 10.5px; color: #64748b; margin-top: 5px;">
+      Flujo desacoplado: Petición entrante &rarr; Enrutamiento &rarr; Fachada orquestadora &rarr; Estrategia de cálculo &rarr; Persistencia ORM &rarr; Respuesta JSON.
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECCION 2: CAPA DE SERVICIOS Y PATRON STRATEGY -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">2</span>
+    Capa de Servicios y Patrón de Comportamiento: Strategy
+  </div>
+  <p>
+    Se creó el archivo <code>products/services.py</code> donde se aloja la lógica de negocio pura. Se implementó el patrón de comportamiento <strong>Strategy</strong>, el cual permite definir una familia de algoritmos de descuento, encapsular cada uno en su propia clase y hacerlos intercambiables según la categoría del producto:
+  </p>
+
+  <div class="code-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">products/services.py &mdash; Patrón Strategy</span>
+      <span style="color: #64748b; font-size: 11px;">Python</span>
+    </div>
+    <pre><span class="cmt"># products/services.py</span>
+
+<span class="kw">class</span> <span class="cls">EstrategiaDescuento</span>:
+    <span class="kw">def</span> <span class="fn">calcular</span>(<span class="dec">self</span>, precio):
+        <span class="kw">raise</span> <span class="cls">NotImplementedError</span>
+
+
+<span class="kw">class</span> <span class="cls">DescuentoElectronica</span>(<span class="cls">EstrategiaDescuento</span>):
+    <span class="kw">def</span> <span class="fn">calcular</span>(<span class="dec">self</span>, precio):
+        <span class="kw">return</span> precio * <span class="num">0.90</span>  <span class="cmt"># 10% de descuento</span>
+
+
+<span class="kw">class</span> <span class="cls">DescuentoRopa</span>(<span class="cls">EstrategiaDescuento</span>):
+    <span class="kw">def</span> <span class="fn">calcular</span>(<span class="dec">self</span>, precio):
+        <span class="kw">return</span> precio * <span class="num">0.80</span>  <span class="cmt"># 20% de descuento</span>
+
+
+<span class="kw">class</span> <span class="cls">SinDescuento</span>(<span class="cls">EstrategiaDescuento</span>):
+    <span class="kw">def</span> <span class="fn">calcular</span>(<span class="dec">self</span>, precio):
+        <span class="kw">return</span> precio         <span class="cmt"># 0% de descuento</span>
+
+
+<span class="kw">def</span> <span class="fn">obtener_estrategia</span>(categoria_nombre):
+    estrategias = {
+        <span class="str">'Electronica'</span>: <span class="cls">DescuentoElectronica</span>(),
+        <span class="str">'Electrónica'</span>: <span class="cls">DescuentoElectronica</span>(),
+        <span class="str">'Ropa'</span>: <span class="cls">DescuentoRopa</span>(),
+    }
+    <span class="kw">return</span> estrategias.get(categoria_nombre, <span class="cls">SinDescuento</span>())
+</pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Beneficio Arquitectónico (Principio Open/Closed):</div>
+    Para incorporar nuevas reglas o promociones en el futuro (ej. <em>"Hogar"</em> o <em>"Deportes"</em>), basta con agregar una nueva subclase en <code>services.py</code> sin modificar las vistas ni los modelos existentes.
+  </div>
+</div>
+
+<!-- SECCION 3: PATRON CREACIONAL FACTORY METHOD -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">3</span>
+    Patrón Creacional: Factory Method en models.py
+  </div>
+  <p>
+    En <code>products/models.py</code> se incorporó a la clase <code>Product</code> el método de clase <code>crear_con_categoria_default</code>. Este método implementa el patrón <strong>Factory Method</strong>, encapsulando y estandarizando la instanciación de productos garantizando una categoría predeterminada (<em>'Sin categoría'</em>) si no se especifica una:
+  </p>
+
+  <div class="code-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">products/models.py &mdash; Patrón Factory Method</span>
+      <span style="color: #64748b; font-size: 11px;">Fragmento de Product</span>
+    </div>
+    <pre><span class="cmt"># products/models.py (extracto dentro del modelo Product)</span>
+
+    <span class="dec">@classmethod</span>
+    <span class="kw">def</span> <span class="fn">crear_con_categoria_default</span>(<span class="cls">cls</span>, name, description, price):
+        categoria_default, _ = Category.objects.get_or_create(name=<span class="str">'Sin categoría'</span>)
+        <span class="kw">return</span> <span class="cls">cls</span>.objects.create(
+            name=name,
+            description=description,
+            price=price,
+            category=categoria_default
+        )
+</pre>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECCION 4: PATRON ESTRUCTURAL FACADE -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">4</span>
+    Patrón Estructural: Facade (Fachada) en views.py y urls.py
+  </div>
+  <p>
+    En <code>products/views.py</code> se implementó la función <code>precio_final</code> con el decorador <code>@api_view(['GET'])</code> y protección JWT mediante <code>@permission_classes([IsAuthenticated])</code>. Esta vista actúa como una <strong>Fachada (Facade)</strong> al unificar y ocultar la complejidad de la consulta al ORM, la resolución de la estrategia de descuento y el redondeo monetario en una única interfaz simple:
+  </p>
+
+  <div class="code-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">products/views.py &mdash; Patrón Facade</span>
+      <span style="color: #64748b; font-size: 11px;">DRF Function-Based View</span>
+    </div>
+    <pre><span class="kw">from</span> rest_framework.decorators <span class="kw">import</span> api_view, permission_classes
+<span class="kw">from</span> rest_framework.permissions <span class="kw">import</span> IsAuthenticated
+<span class="kw">from</span> rest_framework.response <span class="kw">import</span> Response
+<span class="kw">from</span> .models <span class="kw">import</span> Product
+<span class="kw">from</span> .services <span class="kw">import</span> obtener_estrategia
+
+<span class="dec">@api_view</span>([<span class="str">'GET'</span>])
+<span class="dec">@permission_classes</span>([IsAuthenticated])
+<span class="kw">def</span> <span class="fn">precio_final</span>(request, pk):
+    producto = Product.objects.get(pk=pk)
+    estrategia = obtener_estrategia(producto.category.name)
+    precio_con_descuento = estrategia.calcular(<span class="fn">float</span>(producto.price))
+    <span class="kw">return</span> Response({
+        <span class="str">'producto'</span>: producto.name,
+        <span class="str">'precio_original'</span>: producto.price,
+        <span class="str">'precio_final'</span>: <span class="fn">round</span>(precio_con_descuento, <span class="num">2</span>)
+    })
+</pre>
+  </div>
+
+  <div class="code-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">products/urls.py &mdash; Registro de la ruta</span>
+      <span style="color: #64748b; font-size: 11px;">Enrutador</span>
+    </div>
+    <pre><span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+<span class="kw">from</span> .views <span class="kw">import</span> CategoryViewSet, ProductViewSet, precio_final
+<span class="kw">from</span> rest_framework.routers <span class="kw">import</span> DefaultRouter
+
+router = DefaultRouter()
+router.register(<span class="str">'products'</span>, ProductViewSet, basename=<span class="str">'products'</span>)
+router.register(<span class="str">'categories'</span>, CategoryViewSet, basename=<span class="str">'categories'</span>)
+
+urlpatterns = [
+    path(<span class="str">''</span>, include(router.urls)),
+    path(<span class="str">'products/&lt;int:pk&gt;/precio-final/'</span>, precio_final, name=<span class="str">'precio-final'</span>),
+]
+</pre>
+  </div>
+</div>
+
+<!-- SECCION 5: PRUEBAS DEL ENDPOINT EN FUNCIONAMIENTO -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">5</span>
+    Pruebas del Endpoint en Funcionamiento con JWT
+  </div>
+  <p>
+    Se probó el endpoint <code>/api/v1/products/&lt;id&gt;/precio-final/</code> con peticiones HTTP protegidas con el token JWT obtenido del endpoint <code>/api/token/</code>, evaluando dos productos de categorías distintas para evidenciar el descuento diferenciado:
+  </p>
+
+  <div class="terminal-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">Prueba 1: Producto Categoría 'Electrónica' (Descuento 10%)</span>
+      <span class="term-ok">HTTP 200 OK</span>
+    </div>
+    <div class="terminal-content">
+<span class="term-prompt">GET</span> /api/v1/products/1/precio-final/ HTTP/1.1
+<span class="term-head">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+
+<span class="term-ok">HTTP/1.1 200 OK</span>
+<span class="term-head">Content-Type: application/json</span>
+{
+  <span style="color: #93c5fd;">"producto"</span>: <span style="color: #86efac;">"Laptop Gamer"</span>,
+  <span style="color: #93c5fd;">"precio_original"</span>: <span style="color: #fde047;">1499.99</span>,
+  <span style="color: #93c5fd;">"precio_final"</span>: <span style="color: #4ade80; font-weight: bold;">1349.99</span>  <span class="cmt">/* 10% de descuento aplicado: 1499.99 * 0.90 = 1349.99 */</span>
+}
+    </div>
+  </div>
+
+  <div class="terminal-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">Prueba 2: Producto Categoría 'Ropa' (Descuento 20%)</span>
+      <span class="term-ok">HTTP 200 OK</span>
+    </div>
+    <div class="terminal-content">
+<span class="term-prompt">GET</span> /api/v1/products/2/precio-final/ HTTP/1.1
+<span class="term-head">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+
+<span class="term-ok">HTTP/1.1 200 OK</span>
+<span class="term-head">Content-Type: application/json</span>
+{
+  <span style="color: #93c5fd;">"producto"</span>: <span style="color: #86efac;">"Camiseta Deportiva"</span>,
+  <span style="color: #93c5fd;">"precio_original"</span>: <span style="color: #fde047;">29.99</span>,
+  <span style="color: #93c5fd;">"precio_final"</span>: <span style="color: #4ade80; font-weight: bold;">23.99</span>  <span class="cmt">/* 20% de descuento aplicado: 29.99 * 0.80 = 23.99 */</span>
+}
+    </div>
+  </div>
+
+  <div class="terminal-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">Prueba 3: Validación de Seguridad sin Token JWT</span>
+      <span style="color: #ef4444; font-weight: 700;">HTTP 401 Unauthorized</span>
+    </div>
+    <div class="terminal-content">
+<span class="term-prompt">GET</span> /api/v1/products/1/precio-final/ HTTP/1.1
+<span class="term-head">(Sin cabecera de autenticación Authorization: Bearer)</span>
+
+<span style="color: #ef4444; font-weight: bold;">HTTP/1.1 401 Unauthorized</span>
+<span class="term-head">Content-Type: application/json</span>
+{
+  <span style="color: #93c5fd;">"detail"</span>: <span style="color: #fca5a5;">"Authentication credentials were not provided."</span>
+}
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECCION 6: PRUEBAS UNITARIAS -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">6</span>
+    Pruebas Unitarias del Endpoint (products/tests.py)
+  </div>
+  <p>
+    En <code>products/tests.py</code> se agregaron las dos pruebas unitarias a la clase <code>ProductTestCase</code>:
+  </p>
+
+  <div class="code-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">products/tests.py &mdash; Pruebas Unitarias para precio-final</span>
+      <span style="color: #64748b; font-size: 11px;">ProductTestCase</span>
+    </div>
+    <pre><span class="cmt"># products/tests.py (incorporado a ProductTestCase)</span>
+
+    <span class="kw">def</span> <span class="fn">test_precio_final_autenticado</span>(<span class="dec">self</span>):
+        <span class="cmt"># Prueba que un usuario autenticado reciba status 200 y el campo precio_final</span>
+        response = <span class="dec">self</span>.client.get(<span class="str">f'/api/v1/products/{self.product.id}/precio-final/'</span>)
+        <span class="dec">self</span>.assertEqual(response.status_code, <span class="num">200</span>)
+        <span class="dec">self</span>.assertIn(<span class="str">'precio_final'</span>, response.data)
+
+    <span class="kw">def</span> <span class="fn">test_precio_final_sin_autenticar</span>(<span class="dec">self</span>):
+        <span class="cmt"># Prueba que una peticion sin token sea rechazada con 401 Unauthorized</span>
+        <span class="dec">self</span>.client.force_authenticate(user=<span class="kw">None</span>)
+        response = <span class="dec">self</span>.client.get(<span class="str">f'/api/v1/products/{self.product.id}/precio-final/'</span>)
+        <span class="dec">self</span>.assertEqual(response.status_code, <span class="num">401</span>)
+</pre>
+  </div>
+</div>
+
+<!-- SECCION 7: EJECUCION DE TODAS LAS PRUEBAS EN TERMINAL -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">7</span>
+    Ejecución de Pruebas en Terminal (python manage.py test)
+  </div>
+  <p>
+    Se ejecutó la suite completa de pruebas mediante <code>python manage.py test -v 2</code>. Las 8 pruebas unitarias (6 de la Práctica 5 más las 2 nuevas de la Capa de Servicios) pasaron exitosamente:
+  </p>
+
+  <div class="terminal-window">
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="window-title">PowerShell &mdash; Suite de Pruebas Automatizadas</span>
+      <span class="term-ok">OK (8/8 TESTS PASSED)</span>
+    </div>
+    <div class="terminal-content">
+<span class="term-prompt">PS C:\Users\MAAIC\OneDrive\Documentos\django></span> .\venv\Scripts\python.exe manage.py test -v 2
+<span class="term-head">Creating test database for alias 'default' ('test_django_api')...</span>
+Found 8 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, rest_framework, rest_framework_simplejwt, staticfiles
+  Apply all migrations: admin, auth, contenttypes, products, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying products.0001_initial... OK
+  Applying products.0002_alter_product_id... OK
+  Applying products.0003_category_product_category... OK
+  Applying sessions.0001_initial... OK
+
+test_create_category (products.tests.CategoryTestCase.test_create_category) ... <span class="term-ok">ok</span>
+test_list_categories (products.tests.CategoryTestCase.test_list_categories) ... <span class="term-ok">ok</span>
+test_create_product (products.tests.ProductTestCase.test_create_product) ... <span class="term-ok">ok</span>
+test_delete_product (products.tests.ProductTestCase.test_delete_product) ... <span class="term-ok">ok</span>
+test_list_products (products.tests.ProductTestCase.test_list_products) ... <span class="term-ok">ok</span>
+test_precio_final_autenticado (products.tests.ProductTestCase.test_precio_final_autenticado) ... <span class="term-ok">ok</span>
+test_precio_final_sin_autenticar (products.tests.ProductTestCase.test_precio_final_sin_autenticar) ... <span class="term-ok">ok</span>
+test_update_product (products.tests.ProductTestCase.test_update_product) ... <span class="term-ok">ok</span>
+
+----------------------------------------------------------------------
+<span class="term-ok">Ran 8 tests in 1.295s</span>
+
+<span class="term-ok">OK</span>
+<span class="term-head">Destroying test database for alias 'default' ('test_django_api')...</span>
+System check identified no issues (0 silenced).
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECCION 8: TABLA DE PATRONES DE DISEÑO -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">8</span>
+    Tabla de Patrones de Diseño Identificados
+  </div>
+  <p>
+    A continuación se resume la clasificación formal, ubicación y justificación técnica de los tres patrones de diseño implementados en el proyecto:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 17%;">Nombre del Patrón</th>
+        <th style="width: 16%;">Categoría</th>
+        <th style="width: 25%;">Dónde se implementó</th>
+        <th style="width: 42%;">¿Por qué corresponde a esa categoría?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Factory Method</strong></td>
+        <td><span class="badge badge-creacional">Creacional</span></td>
+        <td>
+          <code>products/models.py</code><br>
+          <small>Método de clase <code>crear_con_categoria_default</code></small>
+        </td>
+        <td>
+          Pertenece a la categoría creacional porque encapsula la lógica de instanciación del objeto <code>Product</code>. Garantiza la asignación o creación de la categoría por defecto (<em>'Sin categoría'</em>) sin que el cliente deba conocer los detalles de cómo se construye ni asociar manualmente la clave foránea.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Facade (Fachada)</strong></td>
+        <td><span class="badge badge-estructural">Estructural</span></td>
+        <td>
+          <code>products/views.py</code><br>
+          <small>Vista <code>precio_final</code> y ruta asociada</small>
+        </td>
+        <td>
+          Pertenece a la categoría estructural porque compone y organiza múltiples subsistemas (persistencia ORM, selección de estrategia algorítmica y formateo de respuesta). Proporciona una interfaz unificada y de alto nivel que oculta la complejidad interna ante las peticiones del cliente HTTP.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Strategy (Estrategia)</strong></td>
+        <td><span class="badge badge-comportamiento">Comportamiento</span></td>
+        <td>
+          <code>products/services.py</code><br>
+          <small>Clases <code>EstrategiaDescuento</code> y <code>obtener_estrategia</code></small>
+        </td>
+        <td>
+          Pertenece a la categoría de comportamiento porque define una familia de algoritmos de cálculo de descuentos intercambiables en tiempo de ejecución. Permite variar dinámicamente el comportamiento de cálculo según la categoría del producto, desacoplando la lógica de negocio de los controladores.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECCION 9: CONCLUSION TECNICA -->
+<div class="section-block">
+  <div class="section-title">
+    <span class="section-number">9</span>
+    Conclusiones y Beneficios Arquitectónicos
+  </div>
+  <p>
+    La incorporación de la <strong>Capa de Servicios</strong> y la aplicación de los tres patrones de diseño (<strong>Factory Method</strong>, <strong>Facade</strong> y <strong>Strategy</strong>) aportan ventajas sustanciales a la arquitectura de la aplicación:
+  </p>
+  <ul style="margin-left: 20px; color: #334155; line-height: 1.6;">
+    <li><strong>Principio de Responsabilidad Única (SRP):</strong> Las vistas en <code>views.py</code> únicamente se encargan de gestionar el protocolo HTTP y autenticación, mientras que la lógica de cálculo financiero reside exclusivamente en <code>services.py</code>.</li>
+    <li><strong>Principio Abierto / Cerrado (OCP):</strong> Se pueden agregar nuevas reglas comerciales creando nuevas estrategias de descuento sin necesidad de modificar el código existente en las vistas ni en los modelos.</li>
+    <li><strong>Alta Cohesión y Bajo Acoplamiento:</strong> Cada componente del sistema tiene un propósito único y se comunica a través de interfaces claras, facilitando el mantenimiento y las pruebas automatizadas.</li>
+    <li><strong>Seguridad por Capas:</strong> El acceso a la fachada está protegido por tokens JWT, garantizando que solo clientes autorizados puedan interactuar con la lógica del negocio.</li>
+  </ul>
+</div>
+
+</body>
+</html>

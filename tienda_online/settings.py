@@ -43,13 +43,19 @@ BASE_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
 ]
 
 OWN_APPS = [
     'products',
+    'users',
 ]
 
 INSTALLED_APPS = BASE_APPS + THIRD_PARTY_APPS + OWN_APPS
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,10 +150,38 @@ MAILERS = {
     },
 }
 
-# Django REST Framework & SimpleJWT Configuration
+from datetime import timedelta
+
+# Django REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+# Simple JWT Configuration - Configuración del tiempo de vida del token
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+# drf-yasg Swagger Configuration
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'Introduzca su token JWT en el formato: Bearer <su_token>'
+        }
+    },
+    'USE_SESSION_AUTH': True,
+}
+
 

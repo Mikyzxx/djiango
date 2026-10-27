@@ -1,15 +1,18 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from .models import Category, Product
+
+User = get_user_model()
 
 
 class CategoryTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.user = User.objects.create_user(email='testcat@example.com', username='testuser', password='password123')
         self.client.force_authenticate(user=self.user)
         self.category = Category.objects.create(name='Electrónica')
+
 
     def test_create_category(self):
         """Prueba la creación exitosa de una nueva categoría."""
@@ -27,7 +30,7 @@ class CategoryTestCase(TestCase):
 class ProductTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.user = User.objects.create_user(email='testprod@example.com', username='testuser', password='password123')
         self.client.force_authenticate(user=self.user)
         self.category = Category.objects.create(name='Electrónica')
         self.product = Product.objects.create(
